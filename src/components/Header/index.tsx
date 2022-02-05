@@ -9,6 +9,7 @@ import {
   UserGreeting,
   UserName,
   Icon,
+  LogoutButton
  } from "./styles";
 
  interface NameProps {
@@ -26,7 +27,10 @@ export function Header( { name } : NameProps) {
               <UserName>{ name }</UserName>
             </User>
           </UserInfo>
-          <Icon name="power" />
+
+          <LogoutButton >
+            <Icon name="power" />
+          </LogoutButton>
         </UserWrapper>
       </Area>
   )
