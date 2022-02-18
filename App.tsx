@@ -14,12 +14,9 @@ import {
 
 import theme from './src/global/styles/theme';
 
-import { SignIn } from './src/screens/SignIn';
+import { AuthProvider, useAuth } from './src/Hooks/auth';
 
-import { AuthProvider } from './src/Hooks/auth';
-
-import { NavigationContainer } from '@react-navigation/native';
-import { AppRoutes } from './src/routes/app.routes'
+import { Routes } from './src/routes';
 
 export default function App() {
   
@@ -28,13 +25,15 @@ export default function App() {
     Poppins_500Medium,
     Poppins_700Bold
   })
-  if (!fontsLoaded) {
+
+  const { userStorageLoading } = useAuth()
+
+  if (!fontsLoaded || userStorageLoading) {
     return <AppLoading />
   }
 
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer>
         <StatusBar 
           barStyle="light-content"
           backgroundColor="transparent"
@@ -42,10 +41,9 @@ export default function App() {
         />
 
         <AuthProvider>
-          <SignIn /> 
+          <Routes /> 
         </AuthProvider>
 
-      </NavigationContainer>
     </ThemeProvider>
   )
 }

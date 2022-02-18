@@ -1,4 +1,5 @@
 import React from "react";
+import { useAuth } from "../../Hooks/auth";
 
 import { 
   Area,
@@ -16,6 +17,8 @@ import {
    name: string;
  };
 
+ const { signOut } = useAuth()
+
 export function Header( { name } : NameProps) {
   return (
     <Area>
@@ -28,7 +31,7 @@ export function Header( { name } : NameProps) {
             </User>
           </UserInfo>
 
-          <LogoutButton >
+          <LogoutButton onPress={signOut} >
             <Icon name="power" />
           </LogoutButton>
         </UserWrapper>
