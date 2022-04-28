@@ -1,13 +1,39 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react-hooks';
+import fetchMock from 'jest-fetch-mock';
+
 import { AuthProvider, useAuth } from '../../Hooks/auth';
 
-describe('Auth Hook',() => {
+fetchMock.enableMocks();
+
+const userTest = {
+  id: 'any_id',
+  email: 'lucasluisborges1205@gmail.com',
+  name: 'Lucas',
+  photo: 'any_photo.png'
+};
+
+jest.mock('expo-auth-session', () => {
+  return {
+    startAsync: () => ({
+      type: 'success',
+      params: {
+        access_token: 'any_token',
+      }
+    }),
+  }
+})
+
+describe('Auth Hook', () => {
   it('should be able to sign in with Google account existing', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useAuth(), {
+    fetchMock.mockResponseOnce(JSON.stringify(userTest));
+
+    const { result } = renderHook(() => useAuth(), {
       wrapper: AuthProvider
     });
 
-    await waitForNextUpdate();
-    console.log(result)
+    await act(() => result.current.signInWithGoogle());
+
+    expect(result.current.user.email)
+      .toBe(userTest.email);
   });
 });
