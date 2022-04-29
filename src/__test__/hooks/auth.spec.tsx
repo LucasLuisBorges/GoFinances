@@ -14,13 +14,14 @@ const userTest = {
   photo: 'any_photo.png'
 }
 
-jest.mock('expo-auth-session')
+jest.mock('expo-auth-session');
+
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  getItem: jest.fn(),
+  setItem: jest.fn()
+}));
 
 describe('Auth Hook', () => {
-  beforeEach(async () => {
-    const userCollectionKey = "@gofinances:user";
-    await AsyncStorage.removeItem(userCollectionKey);
-  });
 
   it('should be able to sign in with Google account existing', async () => {
     const googleMocked = mocked(startAsync as any)
@@ -56,6 +57,6 @@ describe('Auth Hook', () => {
 
     await act(() => result.current.signInWithGoogle())
 
-    expect(result.current.user).not.toHaveProperty('access_token')
+    expect(result.current.user).not.toHaveProperty('id')
   })
 })
